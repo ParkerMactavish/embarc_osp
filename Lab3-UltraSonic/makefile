@@ -1,6 +1,7 @@
 # Application name
-APPL ?=USI
+APPL ?=UltraSonic
 BOARD = iotdk
+TOOLCHAIN=gnu
 #
 # root dir of embARC
 #
