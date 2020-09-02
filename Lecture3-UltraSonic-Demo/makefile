@@ -1,5 +1,5 @@
 # Application name
-APPL ?=USI
+APPL ?=UltraSonic
 BOARD = iotdk
 TOOLCHAIN=gnu
 #
