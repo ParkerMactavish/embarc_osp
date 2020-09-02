@@ -34,54 +34,53 @@
 
 #define MPU9250_USE_DMP
 
+#define MPU9250_AD0_PIN 0 /*!< I2C Serial Bus Address Selection Pin */
+#define MPU9250_IIC_ADDRESS (0x68 + (MPU9250_AD0_PIN << 1))
 
-#define MPU9250_AD0_PIN		0	/*!< I2C Serial Bus Address Selection Pin */
-#define MPU9250_IIC_ADDRESS	(0x68 + (MPU9250_AD0_PIN << 1))
-
-#define MAG_IIC_ADDRESS 	0x0C
+#define MAG_IIC_ADDRESS 0x0C
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
+	typedef struct
+	{
+		int16_t accel_x;
+		int16_t accel_y;
+		int16_t accel_z;
+		int16_t gyro_x;
+		int16_t gyro_y;
+		int16_t gyro_z;
+		int16_t mag_x;
+		int16_t mag_y;
+		int16_t mag_z;
+		float pitch;
+		float roll;
+		float yaw;
+	} MPU9250_DATA, *MPU9250_DATA_PTR;
 
-typedef struct {
-	int16_t accel_x;
-	int16_t accel_y;
-	int16_t accel_z;
-	int16_t gyro_x;
-	int16_t gyro_y;
-	int16_t gyro_z;
-	int16_t mag_x;
-	int16_t mag_y;
-	int16_t mag_z;
-	float pitch;
-	float roll;
-	float yaw;
-} MPU9250_DATA, *MPU9250_DATA_PTR;
+	typedef struct
+	{
+		uint32_t i2c_id;
+		uint32_t mpu_slvaddr;
+		uint32_t mag_slvaddr;
 
-
-typedef struct {
-	uint32_t i2c_id;
-	uint32_t mpu_slvaddr;
-	uint32_t mag_slvaddr;
-
-} MPU9250_DEF, *MPU9250_DEF_PTR;
+	} MPU9250_DEF, *MPU9250_DEF_PTR;
 
 #define MPU9250_DEFINE(NAME, I2C_ID, SLAVE_ADDRESS) \
-	MPU9250_DEF __ ## NAME = { \
-			.i2c_id = I2C_ID, \
-			.mpu_slvaddr = SLAVE_ADDRESS, \
-			.mag_slvaddr = MAG_IIC_ADDRESS \
-	}; \
-	MPU9250_DEF_PTR NAME = &__ ## NAME
+	MPU9250_DEF __##NAME = {                        \
+		.i2c_id = I2C_ID,                           \
+		.mpu_slvaddr = SLAVE_ADDRESS,               \
+		.mag_slvaddr = MAG_IIC_ADDRESS};            \
+	MPU9250_DEF_PTR NAME = &__##NAME
 
-extern int32_t mpu9250_sensor_init(MPU9250_DEF_PTR obj);
-extern int32_t mpu9250_sensor_deinit(MPU9250_DEF_PTR obj);
-extern int32_t mpu9250_sensor_read(MPU9250_DEF_PTR obj, MPU9250_DATA_PTR mp_data);
-extern int32_t mpu_iic_read(uint32_t slaveaddr, uint8_t regaddr, uint8_t len, uint8_t *val);
-extern int32_t mpu_iic_write(uint32_t slaveaddr, uint8_t regaddr, uint8_t len, uint8_t *val);
-int mpu_get_ms(unsigned long *count);
-void mpu_delay_ms(uint32_t ms);
+	extern int32_t mpu9250_sensor_init(MPU9250_DEF_PTR obj);
+	extern int32_t mpu9250_sensor_deinit(MPU9250_DEF_PTR obj);
+	extern int32_t mpu9250_sensor_read(MPU9250_DEF_PTR obj, MPU9250_DATA_PTR mp_data);
+	extern int32_t mpu_iic_read(uint32_t slaveaddr, uint8_t regaddr, uint8_t len, uint8_t *val);
+	extern int32_t mpu_iic_write(uint32_t slaveaddr, uint8_t regaddr, uint8_t len, uint8_t *val);
+	int mpu_get_ms(unsigned long *count);
+	void mpu_delay_ms(uint32_t ms);
 #ifdef __cplusplus
 }
 #endif

@@ -43,26 +43,15 @@ ON
 
 pLCD_t lcd_obj;
 
-const char degreeC[3] = {0xDF, 'C', '\0'};
-
-/**
- * \brief	Test hardware board without any peripheral
- */
 int main(void)
 {
   lcd_obj = LCD_Init(DFSS_IIC_0_ID);
+  lcd_obj->set_RGB(RED, 0x70);
   board_delay_ms(1000, 0);
-  lcd_obj->set_Cursor(ON);
+  lcd_obj->set_RGB(GREEN, 0x70);
   board_delay_ms(1000, 0);
-  // lcd_obj->set_AutoScroll(ON);
-  // lcd_obj->set_CharStarting(RIGHT);
-  for (int i = 0; i < 48; i++)
-  {
-    lcd_obj->printf("%d", i % 10);
-    board_delay_ms(1000, 1);
-  }
+  lcd_obj->set_RGB(BLUE, 0x70);
 
-  lcd_obj->home();
   while (1)
   {
   }

@@ -43,12 +43,12 @@ static MPU9250_DEFINE(mpu9250_sensor, MPU9250_IIC_ID, MPU9250_IIC_ADDRESS);
 
 int main(void)
 {
-	MPU9250_DATA mpu9250_data = { 0 };
-
+	MPU9250_DATA mpu9250_data = {0};
 
 	mpu9250_sensor_init(mpu9250_sensor);
 	EMBARC_PRINTF("\r\n\r\n\r\n");
-	while (1) {
+	while (1)
+	{
 		mpu9250_sensor_read(mpu9250_sensor, &mpu9250_data);
 #ifdef MPU9250_USE_DMP
 		char datap[10];
@@ -59,13 +59,13 @@ int main(void)
 		sprintf(datay, "%06.1f", mpu9250_data.yaw);
 
 		EMBARC_PRINTF("dmp:  pitch=%s,  roll=%s,  yaw=%s \r\n", datap, datar, datay);
-		board_delay_ms(100, 1);
+		board_delay_ms(10, 1);
 		EMBARC_PRINTF("\x1b[2k\x1b\x45");
 #else
 		EMBARC_PRINTF("accel   x=%5d,   y=%5d,   z=%5d \r\n", mpu9250_data.accel_x, mpu9250_data.accel_y, mpu9250_data.accel_z);
 		EMBARC_PRINTF("gpro    x=%5d,   y=%5d,   z=%5d \r\n", mpu9250_data.gyro_x, mpu9250_data.gyro_y, mpu9250_data.gyro_z);
 		EMBARC_PRINTF("mag     x=%5d,   y=%5d,   z=%5d \r\n", mpu9250_data.mag_x, mpu9250_data.mag_y, mpu9250_data.mag_z);
-		board_delay_ms(100, 1);
+		board_delay_ms(1000, 1);
 		EMBARC_PRINTF("\x1b[2k\x1b\x45");
 		EMBARC_PRINTF("\x1b[2k\x1b\x45");
 		EMBARC_PRINTF("\x1b[2k\x1b\x45");
@@ -74,5 +74,3 @@ int main(void)
 
 	return E_SYS;
 }
-
-

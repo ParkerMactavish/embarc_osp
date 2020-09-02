@@ -1,5 +1,5 @@
 # Application name
-APPL ?= iic1602lcd
+APPL ?= IIC_LCD
 
 BOARD=iotdk
 TOOLCHAIN=gnu
