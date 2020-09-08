@@ -81,7 +81,7 @@ pLCD_t LCD_Init(int32_t iic_id)
     if (iic_ptr == NULL)
         return NULL;
     iic_ptr->iic_open(DEV_MASTER_MODE, IIC_SPEED_STANDARD);
-    iic_ptr->iic_control(IIC_CMD_MST_SET_NEXT_COND, (void *)(IIC_MODE_STOP));
+    // iic_ptr->iic_control(IIC_CMD_MST_SET_NEXT_COND, (void *)(IIC_MODE_STOP));
 
     arc_delay_us(50000);
 
@@ -112,62 +112,6 @@ pLCD_t LCD_Init(int32_t iic_id)
     this->set_Color(WHITE);
 
     return this;
-}
-
-void Lcd_Init_with_I2C_Dev(DEV_IIC_PTR iic)
-{
-    /* Assigning Public Functions */
-    lcd.set_CursorPos = set_CursorPos_;
-    lcd.print = print_;
-    lcd.printf = printf_;
-    lcd.clear = clear_;
-    lcd.home = home_;
-
-    lcd.set_Display = set_Display_;
-    lcd.set_Blink = set_Blink_;
-    lcd.set_Cursor = set_Cursor_;
-    lcd.set_ScrollDir = set_ScrollDir_;
-    lcd.set_CharStarting = set_CharStarting_;
-    lcd.set_AutoScroll = set_AutoScroll_;
-
-    lcd.blink_LED = blink_LED_;
-    lcd.set_Color = set_Color_;
-    lcd.set_RGBs = set_RGBs_;
-    lcd.set_RGB = set_RGB_;
-
-    lcd.write = write_;
-
-    this = &lcd;
-    /* End Assigning Public Functions */
-
-    iic_ptr = iic;
-    arc_delay_us(50000);
-
-    displayFunction_ = 0;
-    displayFunction_ |= LCD_2LINE;
-
-    displayFunction_ |= LCD_FUNCTIONSET;
-    command(displayFunction_);
-
-    arc_delay_us(4500);
-    displayControl_ = LCD_DISPLAYON & LCD_CURSOROFF_ & LCD_BLINKOFF_;
-    this->set_Display(ON);
-
-    this->clear();
-    arc_delay_us(2000);
-
-    displayMode_ = LCD_ENTRYLEFT & LCD_ENTRYDECREMENT_;
-    command(LCD_ENTRYMODESET | displayMode_);
-
-    i2c_setRGBReg(REG_MODE1, 0);
-
-    i2c_setRGBReg(REG_OUTPUT, 0xFF);
-
-    i2c_setRGBReg(REG_MODE2, 0x20);
-
-    this->blink_LED(OFF);
-
-    this->set_Color(WHITE);
 }
 
 static void set_CursorPos_(uint8_t Col, uint8_t Row)
@@ -203,38 +147,6 @@ static void write_(const char Chr)
 {
     uint8_t Data[2] = {0x40, Chr};
     i2c_sendBytes(Data, 2);
-}
-
-void Lcd_Write(const char Chr)
-{
-    /**
-     * 先利用iic_control設定 IIC_CMD_MST_SET_TAR_ADDR
-     * 將Master的目標位址設定成LCD的地址 - 0x3E
-     * {
-     */
-    iic_ptr->iic_control(IIC_CMD_MST_SET_TAR_ADDR, LCD_ADDRESS);
-    /**
-     * }
-     */
-
-    /**
-     * 將0x40與傳進來的Chr變數準備好，變成一個array
-     * 注意因為每次傳送都是一個byte，所以型別寫uint8_t/char都可以
-     * {
-     */
-    uint8_t data[2] = {0x40, Chr};
-    /**
-     * }
-     */
-
-    /**
-     * 透過iic_write寫出去
-     * {
-     */
-    iic_ptr->iic_write(data, 2);
-    /**
-     * }
-     */
 }
 
 static void clear_()

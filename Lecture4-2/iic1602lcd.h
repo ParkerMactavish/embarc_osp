@@ -2,7 +2,6 @@
 #define IIC1602LCD_H
 
 #include <stdint.h>
-#include "dev_iic.h"
 
 /* LCD Address */
 #define LCD_ADDRESS (0x3E)
@@ -121,6 +120,4 @@ typedef struct iic1602lcd_obj_s
 
 pLCD_t LCD_Init(int32_t iic_id);
 
-void Lcd_Init_with_I2C_Dev(DEV_IIC_PTR iic);
-void Lcd_Write(char Chr);
 #endif
